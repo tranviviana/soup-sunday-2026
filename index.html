@@ -1,0 +1,577 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Soup Semi-Frequent Sundays</title>
+<meta name="description" content="Solve the puzzle. Claim a seat.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🥣</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,400&family=Karla:ital,wght@0,400;0,500;0,700;1,400&family=Special+Elite&family=Alfa+Slab+One&family=Bree+Serif&display=swap">
+
+<style>
+/* ============ base ============ */
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --ink:#241F19; --ink2:#5C544A; --ink3:#8C8378;
+  --paper:#F7F1E4; --panel:#FFFFFF; --line:#DED4C0; --accent:#A6321F;
+  --disp:'Fraunces',Georgia,serif; --body:'Karla',system-ui,sans-serif;
+  --dispset:'SOFT' 40,'WONK' 1,'opsz' 60;
+}
+html{-webkit-text-size-adjust:100%}
+body{
+  font-family:var(--body); font-size:16.5px; line-height:1.55;
+  color:var(--ink); background:var(--paper);
+  padding-inline:20px; padding-block:0;
+  transition:background .5s ease, color .5s ease;
+}
+.wrap{max-width:660px;margin:0 auto}
+h1,h2,h3{font-family:var(--disp);font-variation-settings:var(--dispset);line-height:1.1;text-wrap:balance}
+a{color:inherit}
+[hidden]{display:none!important}
+
+/* ============ lock screen ============ */
+#lock{min-height:100svh;display:flex;flex-direction:column;justify-content:center;padding-block:56px}
+#lock .bowl{display:block;margin:0 auto 22px}
+#lock h1{
+  font-size:clamp(34px,9vw,52px);text-align:center;font-weight:700;
+  letter-spacing:-.02em;
+}
+#lock h1 em{
+  display:block;font-style:italic;font-size:.42em;color:var(--accent);
+  letter-spacing:.04em;margin:.35em 0 .2em;font-weight:600;
+}
+#lock .tag{
+  text-align:center;color:var(--ink2);margin:22px auto 0;max-width:34ch;font-size:15.5px;
+}
+#gateform{margin-top:38px;display:flex;flex-direction:column;align-items:center;gap:14px}
+#code{
+  font-family:var(--body);font-size:22px;font-weight:700;
+  letter-spacing:.42em;text-transform:uppercase;text-align:center;
+  width:min(100%,340px);padding:16px 12px 16px 22px;
+  background:var(--panel);color:var(--ink);
+  border:2px solid var(--line);border-radius:8px;
+}
+#code::placeholder{letter-spacing:.2em;font-weight:400;color:var(--ink3);text-transform:none}
+#code:focus{outline:none;border-color:var(--accent)}
+#go{
+  font-family:var(--body);font-size:13px;font-weight:700;letter-spacing:.16em;
+  text-transform:uppercase;cursor:pointer;
+  background:var(--ink);color:var(--paper);border:0;border-radius:8px;
+  padding:15px 34px;min-height:48px;
+}
+#go:hover{background:var(--accent)}
+#go:focus-visible,#code:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+#msg{min-height:22px;font-size:14px;color:var(--accent);text-align:center;font-weight:500}
+#lock .foot{
+  margin-top:52px;text-align:center;font-size:12.5px;color:var(--ink3);
+  letter-spacing:.04em;line-height:1.7;
+}
+
+/* ============ week pages ============ */
+.week{padding-block:38px 76px;animation:rise .5s ease both}
+@keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.week{animation:none}*{transition:none!important}}
+
+.eyebrow{
+  font-size:11px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;
+  color:var(--accent);
+}
+.week h1{font-size:clamp(32px,8.5vw,50px);margin:10px 0 0;letter-spacing:-.02em}
+.dateline{
+  margin-top:14px;padding-top:14px;border-top:1px solid var(--line);
+  display:flex;flex-wrap:wrap;gap:8px 18px;align-items:baseline;
+  font-size:14px;color:var(--ink2);
+}
+.dateline b{color:var(--ink);font-weight:700}
+.seats{
+  font-family:var(--disp);font-variation-settings:var(--dispset);
+  font-weight:700;color:var(--accent);font-size:17px;
+}
+
+section.blk{margin-top:34px}
+section.blk > h2{
+  font-size:11px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;
+  color:var(--ink3);font-family:var(--body);margin-bottom:12px;
+}
+.lede{font-size:18px;line-height:1.55}
+.lede + p{margin-top:12px;color:var(--ink2);font-size:15.5px}
+
+.menu{border-top:1px solid var(--line)}
+.menu .row{
+  display:flex;gap:16px;align-items:baseline;
+  padding:15px 0;border-bottom:1px solid var(--line);
+}
+.menu .lbl{
+  font-size:10.5px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--ink3);width:78px;flex:none;padding-top:5px;
+}
+.menu .val{flex:1}
+.menu .val strong{
+  display:block;font-family:var(--disp);font-variation-settings:var(--dispset);
+  font-weight:700;font-size:20px;line-height:1.2;
+}
+.menu .val span{display:block;color:var(--ink2);font-size:14.5px;margin-top:3px}
+
+.gag{
+  margin-top:16px;padding:14px 16px;background:var(--panel);
+  border-left:3px solid var(--accent);border-radius:0 8px 8px 0;
+  font-size:15px;color:var(--ink2);line-height:1.55;
+}
+.gag b{color:var(--ink)}
+
+details.rec{margin-top:18px;border-top:1px solid var(--line)}
+details.rec summary{
+  list-style:none;cursor:pointer;padding:14px 2px;min-height:48px;
+  display:flex;align-items:center;gap:10px;
+  font-size:11px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--accent);
+}
+details.rec summary::-webkit-details-marker{display:none}
+details.rec summary::before{content:'+';font-size:17px;width:14px;flex:none;text-align:center}
+details.rec[open] summary::before{content:'–'}
+details.rec summary:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+.recbody{padding-bottom:22px}
+.recbody h4{
+  font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink3);
+  font-family:var(--body);font-weight:700;margin:0 0 9px;
+}
+ul.ing{list-style:none;display:grid;gap:5px;margin-bottom:24px}
+ul.ing li{font-size:14px;color:var(--ink2);line-height:1.45}
+ul.ing li b{color:var(--ink);font-weight:700}
+ol.method{padding-left:22px;display:grid;gap:10px}
+ol.method li{font-size:15px;line-height:1.55;color:var(--ink2)}
+ol.method li b{color:var(--ink)}
+ol.method li::marker{color:var(--accent);font-weight:700}
+
+.rules{display:grid;gap:2px}
+.rules .r{
+  background:var(--panel);padding:14px 16px;
+  border-radius:8px;font-size:15px;color:var(--ink2);line-height:1.5;
+}
+.rules .r b{display:block;color:var(--ink);font-family:var(--disp);
+  font-variation-settings:var(--dispset);font-weight:700;font-size:16.5px;margin-bottom:3px}
+
+.cta{
+  margin-top:36px;padding-top:28px;border-top:2px solid var(--ink);
+  text-align:center;
+}
+.cta a.btn{
+  display:inline-block;text-decoration:none;
+  background:var(--accent);color:#fff;
+  font-size:14px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
+  padding:19px 42px;border-radius:9px;min-height:52px;
+}
+.cta a.btn:hover{filter:brightness(1.12)}
+.cta a.btn:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
+.cta .fine{margin-top:16px;font-size:13.5px;color:var(--ink2);line-height:1.6}
+.cta .fine b{color:var(--ink)}
+
+.backrow{margin-top:44px;text-align:center}
+.backrow button{
+  background:none;border:0;cursor:pointer;font-family:var(--body);
+  font-size:12px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;
+  color:var(--ink3);padding:12px 16px;min-height:44px;
+}
+.backrow button:hover{color:var(--accent)}
+
+/* ============ theme: case file ============ */
+body[data-week="w1"]{
+  --paper:#EAE1C8; --panel:#F4EEDC; --ink:#23201A; --ink2:#544D3E; --ink3:#867C68;
+  --line:#C9BC9C; --accent:#A6321F;
+  --disp:'Special Elite',Courier,monospace; --dispset:normal;
+}
+body[data-week="w1"] .week h1{letter-spacing:.01em}
+body[data-week="w1"] .menu .val strong{letter-spacing:.01em;font-size:19px}
+body[data-week="w1"] .dateline{border-top-style:double;border-top-width:4px}
+
+/* ============ theme: clay ============ */
+body[data-week="w2"]{
+  --paper:#E9E0D0; --panel:#F4EDE1; --ink:#2E2721; --ink2:#5E5344; --ink3:#8F8271;
+  --line:#CDBFA8; --accent:#A4653F;
+  --disp:'Fraunces',Georgia,serif; --dispset:'SOFT' 100,'WONK' 1,'opsz' 72;
+}
+body[data-week="w2"] .gag{border-left-color:#7A8465}
+body[data-week="w2"] .rules .r{border-radius:14px 8px 16px 10px}
+
+/* ============ theme: pumpkins ============ */
+body[data-week="w3"]{
+  --paper:#100D0A; --panel:#1C1712; --ink:#F6EAD6; --ink2:#B7A48A; --ink3:#8A7962;
+  --line:#3A2F23; --accent:#F0851C;
+  --disp:'Alfa Slab One',Georgia,serif; --dispset:normal;
+}
+body[data-week="w3"] .week h1{
+  letter-spacing:-.01em;
+  text-shadow:0 0 34px rgba(240,133,28,.42);
+}
+body[data-week="w3"] .cta a.btn{color:#100D0A}
+body[data-week="w3"] .menu .val strong{font-size:18px;letter-spacing:0}
+body[data-week="w3"] .eyebrow{color:#FFB25C}
+
+/* ============ theme: camp ============ */
+body[data-week="w4"]{
+  --paper:#FAF2E1; --panel:#FFFFFF; --ink:#233C57; --ink2:#4F6379; --ink3:#8A97A5;
+  --line:#D4C7AE; --accent:#C2382F;
+  --disp:'Bree Serif',Georgia,serif; --dispset:normal;
+}
+body[data-week="w4"] .dateline{
+  border-top:0;
+  background:repeating-linear-gradient(90deg,#C2382F 0 12px,#233C57 12px 24px,#E7C24A 24px 36px);
+  background-size:100% 4px;background-repeat:no-repeat;background-position:top;
+  padding-top:20px;
+}
+body[data-week="w4"] .cta{
+  border-top:0;
+  background:repeating-linear-gradient(90deg,#C2382F 0 12px,#233C57 12px 24px,#E7C24A 24px 36px);
+  background-size:100% 4px;background-repeat:no-repeat;background-position:top;
+  padding-top:30px;
+}
+</style>
+</head>
+<body>
+
+<!-- ========================= LOCK ========================= -->
+<main id="lock" class="wrap">
+  <svg class="bowl" width="104" height="46" viewBox="0 0 96 42" fill="none" aria-hidden="true">
+    <path d="M31 18 C26 13 35 10 30 4" stroke="#A6321F" stroke-width="1.8" stroke-linecap="round"/>
+    <path d="M48 18 C43 12 52 9 47 2" stroke="#A6321F" stroke-width="1.8" stroke-linecap="round"/>
+    <path d="M65 18 C60 13 69 10 64 4" stroke="#A6321F" stroke-width="1.8" stroke-linecap="round"/>
+    <path d="M10 23 L86 23" stroke="#241F19" stroke-width="2" stroke-linecap="round"/>
+    <path d="M13 23 C13 36 26 40 48 40 C70 40 83 36 83 23" stroke="#241F19" stroke-width="2" stroke-linecap="round"/>
+  </svg>
+
+  <h1>SOUP<em>semi-frequent</em>SUNDAYS</h1>
+
+  <p class="tag">You got the puzzle. Type the answer and the week opens up.</p>
+
+  <form id="gateform" autocomplete="off">
+    <label for="code" class="sr-only" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">Puzzle answer</label>
+    <input id="code" name="code" type="text" placeholder="the answer" autocapitalize="characters" autocorrect="off" spellcheck="false" enterkeyhint="go">
+    <button id="go" type="submit">Unlock</button>
+    <p id="msg" role="status" aria-live="polite"></p>
+  </form>
+
+  <p class="foot">Puzzles drop Tuesdays at 11am.<br>Signups close Thursday at noon.</p>
+</main>
+
+<!-- ========================= WEEK 1 ========================= -->
+<main class="week wrap" id="w1" hidden>
+  <p class="eyebrow">Case file 0927 &middot; unsealed</p>
+  <h1>The Case File</h1>
+  <div class="dateline">
+    <span><b>Sunday 27 September</b></span>
+    <span class="seats">5 seats</span>
+  </div>
+
+  <section class="blk">
+    <h2>The night</h2>
+    <p class="lede">A murder to solve, spread across one table. Documents, photographs, transcripts, and five people arguing over what any of it means.</p>
+    <p>Nobody's lying to anybody — you're all on the same side. That's why it's five and not more: everyone needs to be able to see the same piece of paper at the same time.</p>
+  </section>
+
+  <section class="blk">
+    <h2>The menu</h2>
+    <div class="menu">
+      <div class="row"><div class="lbl">Soup</div><div class="val"><strong>Roasted tomato</strong><span>Tomatoes, shallots and whole heads of garlic, roasted until they collapse. Blended with basil and cream.</span></div></div>
+      <div class="row"><div class="lbl">Sandwich</div><div class="val"><strong>Chicken grilled cheese</strong><span>Sharp cheddar and dijon on sourdough, pressed.</span></div></div>
+    </div>
+    <p class="gag"><b>There will be red spatter.</b> The lab has not yet determined whether the substance is blood.</p>
+    <details class="rec">
+      <summary>The recipe</summary>
+      <div class="recbody">
+        <h4>Ingredients &mdash; scaled for 6</h4>
+        <ul class="ing">
+          <li><b>4½ lb</b> mixed fresh tomatoes, halved if bigger than 1"</li>
+          <li><b>6</b> medium shallots, peeled and halved</li>
+          <li><b>4½ Tbsp</b> extra-virgin olive oil</li>
+          <li><b>2–3</b> heads of garlic</li>
+          <li><b>1½ tsp</b> kosher salt, <b>⅜ tsp</b> black pepper</li>
+          <li><b>1½ cups</b> packed fresh basil</li>
+          <li><b>¾ cup</b> chicken stock</li>
+          <li><b>¾ cup</b> heavy cream, plus more to serve</li>
+        </ul>
+        <h4>Method</h4>
+        <ol class="method">
+          <li>Oven to <b>425°F</b>. Halve any tomato bigger than an inch; peel and halve the shallots.</li>
+          <li>Cut the tops off the garlic heads to expose the cloves, drizzle with oil, wrap each in foil.</li>
+          <li>Spread everything across <b>two sheet pans</b> and toss with the oil, salt and pepper. Tuck the garlic in.</li>
+          <li>Roast <b>35–40 minutes</b>, until the tomatoes collapse and the shallots go soft.</li>
+          <li>Squeeze the garlic out of its skins into the pot, add everything from the pans plus the basil and stock.</li>
+          <li>Blend smooth. Stir in the cream. Season.</li>
+        </ol>
+        <p class="gag" style="margin-top:20px">Adapted from Well Seasoned Studio, scaled to 1.5×. Made the day before, which makes it better.</p>
+      </div>
+    </details>
+  </section>
+
+  <section class="blk">
+    <h2>The rules</h2>
+    <div class="rules">
+      <div class="r"><b>Bring your own bowl</b>Also utensils, a plate and a cup. I don't have eight of everything.</div>
+      <div class="r"><b>$8, or bring something</b>Drinks, snacks or dessert instead of paying — only 3 people a week can pick that, first come.</div>
+      <div class="r"><b>Nobody pays yet</b>Not until the night is confirmed. If it doesn't happen, no money moved.</div>
+    </div>
+  </section>
+
+  <div class="cta">
+    <a class="btn" href="https://docs.google.com/forms/d/e/1FAIpQLSf09MbwjdTQ2MlM7yQG23X7RVmlJJpyOpzHAvwUmQ9bNCa5Tw/viewform" target="_blank" rel="noopener">Claim a seat</a>
+    <p class="fine">Signups close <b>Thursday at noon</b>. You'll hear from me either way before Friday afternoon.<br>Time and address come in that text.</p>
+  </div>
+  <div class="backrow"><button type="button" class="back">← another week</button></div>
+</main>
+
+<!-- ========================= WEEK 2 ========================= -->
+<main class="week wrap" id="w2" hidden>
+  <p class="eyebrow">Field log 1004 &middot; specimens catalogued</p>
+  <h1>Clay Day</h1>
+  <div class="dateline">
+    <span><b>Sunday 4 October</b></span>
+    <span class="seats">7 seats</span>
+  </div>
+
+  <section class="blk">
+    <h2>The night</h2>
+    <p class="lede">Everyone gets the same character, pulled out of a hat at the start, and sculpts their own version of it. Seven wildly different attempts at one thing, lined up at the end.</p>
+    <p>Nobody pre-plans, because nobody knows the prompt until they arrive. Air-dry clay, no kiln, no skill required — the ones that go badly are the good ones. I keep them all.</p>
+  </section>
+
+  <section class="blk">
+    <h2>The menu</h2>
+    <div class="menu">
+      <div class="row"><div class="lbl">Soup</div><div class="val"><strong>Creamy wild mushroom</strong><span>Fresh mushrooms and dried porcini, blended smooth with thyme and cream.</span></div></div>
+      <div class="row"><div class="lbl">Sandwich</div><div class="val"><strong>Roast beef, provolone &amp; dijon</strong><span>On ciabatta, pressed. Horseradish on the table if you want it.</span></div></div>
+    </div>
+    <p class="gag"><b>Eat first, sculpt second.</b> Clay hands and a pressed sandwich do not go together, and nobody wants to wash up twice.</p>
+    <details class="rec">
+      <summary>The recipe</summary>
+      <div class="recbody">
+        <h4>Ingredients &mdash; scaled for 8</h4>
+        <ul class="ing">
+          <li><b>28 oz</b> mixed fresh mushrooms</li>
+          <li><b>½ cup</b> dried porcini</li>
+          <li><b>8 cups</b> chicken stock</li>
+          <li><b>2</b> onions, finely chopped</li>
+          <li><b>4</b> cloves garlic, finely chopped</li>
+          <li><b>1 tsp</b> thyme</li>
+          <li><b>⅔ cup</b> heavy cream</li>
+          <li><b>2–4 Tbsp</b> olive oil, parsley, salt and pepper</li>
+        </ul>
+        <h4>Method</h4>
+        <ol class="method">
+          <li>Cover the porcini with hot water and leave them <b>20 minutes</b>.</li>
+          <li>Soften the onions in oil over medium heat, 5–7 minutes.</li>
+          <li>Add the fresh mushrooms and cook about <b>10 minutes</b>, until they've given up their water and shrunk right down.</li>
+          <li>Garlic and thyme, one minute more.</li>
+          <li>Add the porcini and their soaking liquid — pour carefully and <b>leave the grit behind</b>.</li>
+          <li>Stock in, simmer 10–15 minutes. Blend smooth, stir in the cream, season.</li>
+        </ol>
+        <p class="gag" style="margin-top:20px">Adapted from Inside the Rustic Kitchen, scaled to 2×.</p>
+      </div>
+    </details>
+  </section>
+
+  <section class="blk">
+    <h2>The rules</h2>
+    <div class="rules">
+      <div class="r"><b>Bring your own bowl</b>Also utensils, a plate and a cup. I don't have eight of everything.</div>
+      <div class="r"><b>$8, or bring something</b>Drinks, snacks or dessert instead of paying — only 3 people a week can pick that, first come.</div>
+      <div class="r"><b>Nobody pays yet</b>Not until the night is confirmed. If it doesn't happen, no money moved.</div>
+    </div>
+  </section>
+
+  <div class="cta">
+    <a class="btn" href="https://docs.google.com/forms/d/e/1FAIpQLSeHEXfxetfb8y0fjcO4-PAfveQkGHJry7r3GTerJe3_MSvk8A/viewform" target="_blank" rel="noopener">Claim a seat</a>
+    <p class="fine">Signups close <b>Thursday at noon</b>. You'll hear from me either way before Friday afternoon.<br>Time and address come in that text.</p>
+  </div>
+  <div class="backrow"><button type="button" class="back">← another week</button></div>
+</main>
+
+<!-- ========================= WEEK 3 ========================= -->
+<main class="week wrap" id="w3" hidden>
+  <p class="eyebrow">Bulletin 1025 &middot; the patch was disturbed</p>
+  <h1>Pumpkin Carving</h1>
+  <div class="dateline">
+    <span><b>Sunday 25 October</b></span>
+    <span class="seats">7 seats</span>
+  </div>
+
+  <section class="blk">
+    <h2>The night</h2>
+    <p class="lede">Carving, on every flat surface I own, with newspaper under all of it. The messiest night of the season by a wide margin.</p>
+    <p><b>Bring your own pumpkin and that covers your $8.</b> Pick whatever shape speaks to you. There will be a lot of guts.</p>
+  </section>
+
+  <section class="blk">
+    <h2>The menu</h2>
+    <div class="menu">
+      <div class="row"><div class="lbl">Soup</div><div class="val"><strong>Butternut squash &amp; sage</strong><span>Roasted squash and potato, blended creamy, with brown butter and thyme.</span></div></div>
+      <div class="row"><div class="lbl">Sandwich</div><div class="val"><strong>Apple &amp; smoked gouda</strong><span>On sourdough. Salt and smoke against a sweet soup.</span></div></div>
+    </div>
+    <p class="gag"><b>We roast the seeds out of your pumpkin</b> while the soup reheats, and they go on top of your own bowl. You eat the thing you carved.</p>
+    <details class="rec">
+      <summary>The recipe</summary>
+      <div class="recbody">
+        <h4>Ingredients &mdash; scaled for 8</h4>
+        <ul class="ing">
+          <li><b>1 very large or 2 medium</b> butternut squash, peeled, seeded, 1" cubes</li>
+          <li><b>3</b> Yukon Gold potatoes, peeled, 1" pieces</li>
+          <li><b>4½ Tbsp</b> olive oil, divided &middot; <b>1½ Tbsp</b> butter</li>
+          <li><b>2</b> yellow onions &middot; <b>2</b> celery ribs &middot; <b>2</b> large carrots</li>
+          <li><b>1½ Tbsp</b> fresh thyme</li>
+          <li><b>6 cups</b> chicken broth, or more</li>
+          <li>Heavy cream to drizzle, salt and pepper</li>
+        </ul>
+        <h4>Method</h4>
+        <ol class="method">
+          <li>Oven to <b>400°F</b>. Toss the squash and potatoes with 3 Tbsp of the oil across <b>two sheet pans</b>, season well.</li>
+          <li>Roast <b>30–35 minutes</b>, stirring halfway, until tender.</li>
+          <li>Meanwhile melt the butter with the rest of the oil over medium. Cook the onion, celery and carrot 7–10 minutes until soft. Thyme in, season.</li>
+          <li>Add the roasted squash and potatoes, pour in the broth, simmer 10 minutes.</li>
+          <li>Blend until creamy, <b>adding broth if it's too thick</b> — squash and potato make this one heavy.</li>
+          <li>Thyme on top, cream drizzled over.</li>
+        </ol>
+        <p class="gag" style="margin-top:20px">Adapted from Delish, scaled to 1.5×. Made entirely ahead — the night's work is the carving.</p>
+      </div>
+    </details>
+  </section>
+
+  <section class="blk">
+    <h2>The rules</h2>
+    <div class="rules">
+      <div class="r"><b>Bring your own bowl</b>Also utensils, a plate and a cup. I don't have eight of everything.</div>
+      <div class="r"><b>A pumpkin counts as your $8</b>This week only. Otherwise it's $8, or drinks, snacks or dessert — 3 of those a week, first come.</div>
+      <div class="r"><b>Nobody pays yet</b>Not until the night is confirmed. If it doesn't happen, no money moved.</div>
+    </div>
+  </section>
+
+  <div class="cta">
+    <a class="btn" href="https://docs.google.com/forms/d/e/1FAIpQLSd1yMipLP4ZSP4H0pIlMvk-Wrj0xLV2U3gll6rZWEsjpJ7KKg/viewform" target="_blank" rel="noopener">Claim a seat</a>
+    <p class="fine">Signups close <b>Thursday at noon</b>. You'll hear from me either way before Friday afternoon.<br>Time and address come in that text.</p>
+  </div>
+  <div class="backrow"><button type="button" class="back">← another week</button></div>
+</main>
+
+<!-- ========================= WEEK 4 ========================= -->
+<main class="week wrap" id="w4" hidden>
+  <p class="eyebrow">Cabin roster &middot; one camper unmatched</p>
+  <h1>Parent Trap</h1>
+  <div class="dateline">
+    <span><b>Sunday 8 November</b></span>
+    <span class="seats">7 seats</span>
+  </div>
+
+  <section class="blk">
+    <h2>The night</h2>
+    <p class="lede">The movie, and friendship bracelets while it plays. Talking over it is encouraged — that's the whole reason your hands are busy.</p>
+    <p>Bracelets get made and given the same night, to whoever's in the room. Nothing gets saved for later.</p>
+  </section>
+
+  <section class="blk">
+    <h2>The menu</h2>
+    <div class="menu">
+      <div class="row"><div class="lbl">Soup</div><div class="val"><strong>Chicken vegetable</strong><span>Browned thighs, shredded back in, with carrot, celery, zucchini, cumin and a lot of lemon.</span></div></div>
+      <div class="row"><div class="lbl">Sandwich</div><div class="val"><strong>Twin grilled cheeses</strong><span>Cheddar on one, smoked gouda on the other, cut in half and swapped so nothing matches.</span></div></div>
+      <div class="row"><div class="lbl">Dessert</div><div class="val"><strong>Oreos and peanut butter</strong><span>Non-negotiable.</span></div></div>
+    </div>
+    <p class="gag"><b>Everything comes in twos except one thing.</b> That's the movie, the sandwich, and the bracelet you're about to give away.</p>
+    <details class="rec">
+      <summary>The recipe</summary>
+      <div class="recbody">
+        <h4>Ingredients &mdash; scaled for 8</h4>
+        <ul class="ing">
+          <li><b>3 Tbsp</b> olive oil</li>
+          <li><b>1½ cups</b> each diced carrot, celery and onion</li>
+          <li><b>6</b> cloves garlic, minced</li>
+          <li><b>¾ cup</b> zucchini &middot; <b>¾ cup</b> bell pepper, diced</li>
+          <li><b>6</b> bone-in chicken thighs</li>
+          <li><b>9 cups</b> chicken stock &middot; <b>1½ tsp</b> cumin</li>
+          <li><b>1–2</b> lemons, juiced &middot; parsley and cilantro</li>
+        </ul>
+        <h4>Method</h4>
+        <ol class="method">
+          <li>Season the thighs. Heat the oil over medium-high and <b>brown them on all sides</b>. Set aside, keep the drippings.</li>
+          <li>Medium heat. Onion, carrot and celery until softened.</li>
+          <li>Bell pepper, zucchini, garlic and cumin, about 2 minutes.</li>
+          <li>Heat up, stock in, bring to a simmer. Chicken back in, drop to low.</li>
+          <li><b>10–15 minutes</b> until cooked through. Lift the thighs, shred the meat off the bones, return it.</li>
+          <li>Off the heat, stir in the herbs and cover. Lemon juice to taste.</li>
+        </ol>
+        <p class="gag" style="margin-top:20px">Adapted from Kitchen on Fire, scaled to 1.5×. No sausage.</p>
+      </div>
+    </details>
+  </section>
+
+  <section class="blk">
+    <h2>The rules</h2>
+    <div class="rules">
+      <div class="r"><b>Bring your own bowl</b>Also utensils, a plate and a cup. I don't have eight of everything.</div>
+      <div class="r"><b>$8, or bring something</b>Drinks, snacks or dessert instead of paying — only 3 people a week can pick that, first come.</div>
+      <div class="r"><b>Nobody pays yet</b>Not until the night is confirmed. If it doesn't happen, no money moved.</div>
+    </div>
+  </section>
+
+  <div class="cta">
+    <a class="btn" href="https://docs.google.com/forms/d/e/1FAIpQLSfnrpYh2hJnp7TZD0hVUExPTqDlQdmp0HIZy-7RTWYa8vh5qg/viewform" target="_blank" rel="noopener">Claim a seat</a>
+    <p class="fine">Signups close <b>Thursday at noon</b>. You'll hear from me either way before Friday afternoon.<br>Time and address come in that text.</p>
+  </div>
+  <div class="backrow"><button type="button" class="back">← another week</button></div>
+</main>
+
+<script>
+(function () {
+  var CODES = { '3f3vca':'w1', 'yjmicv':'w2', '3glc0e':'w3', 'yjramq':'w4' };
+
+  function hash(s){ var x=5381; for (var i=0;i<s.length;i++){ x=((x*33)^s.charCodeAt(i))>>>0; } return x.toString(36); }
+  function clean(s){ return (s||'').toUpperCase().replace(/[^A-Z]/g,''); }
+
+  var lock = document.getElementById('lock');
+  var form = document.getElementById('gateform');
+  var input = document.getElementById('code');
+  var msg = document.getElementById('msg');
+  var tries = 0;
+
+  function show(id){
+    lock.hidden = true;
+    ['w1','w2','w3','w4'].forEach(function(w){ document.getElementById(w).hidden = (w !== id); });
+    document.body.setAttribute('data-week', id);
+    window.scrollTo(0,0);
+    try { localStorage.setItem('ssfs-week', id); } catch (e) {}
+  }
+
+  function reset(){
+    ['w1','w2','w3','w4'].forEach(function(w){ document.getElementById(w).hidden = true; });
+    document.body.removeAttribute('data-week');
+    lock.hidden = false;
+    msg.textContent = '';
+    input.value = '';
+    tries = 0;
+    window.scrollTo(0,0);
+    try { localStorage.removeItem('ssfs-week'); } catch (e) {}
+    input.focus();
+  }
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var week = CODES[hash(clean(input.value))];
+    if (week) { show(week); return; }
+    tries++;
+    msg.textContent = tries < 3
+      ? 'Not it. Try again.'
+      : 'Still not it — text me and I’ll give you a nudge.';
+    input.select();
+  });
+
+  Array.prototype.forEach.call(document.querySelectorAll('.back'), function (b) {
+    b.addEventListener('click', reset);
+  });
+
+  // remember the last unlocked week on this device
+  try {
+    var saved = localStorage.getItem('ssfs-week');
+    if (saved && document.getElementById(saved)) { show(saved); }
+  } catch (e) {}
+})();
+</script>
+</body>
+</html>
