@@ -516,7 +516,38 @@ body[data-week="w4"] .cta{
 
 <script>
 (function () {
+
+  /* ===============================================================
+     COUNTER — replace YOURCODE below with your GoatCounter code.
+     Sign up free at goatcounter.com and pick a code, e.g. soupsunday.
+     Then this line becomes:   var GC_CODE = 'soupsunday';
+     Left as YOURCODE, nothing loads and nothing is sent.
+  =============================================================== */
+  var GC_CODE = 'soup-sunday';
+
+  var gcQueue = [];
+  function gc(path, title) {
+    var o = { path: path, title: title, event: true };
+    if (window.goatcounter && window.goatcounter.count) { window.goatcounter.count(o); }
+    else { gcQueue.push(o); }
+  }
+  if (GC_CODE && GC_CODE !== 'YOURCODE') {
+    var gs = document.createElement('script');
+    gs.async = true;
+    gs.src = '//gc.zgo.at/count.js';
+    gs.setAttribute('data-goatcounter', 'https://' + GC_CODE + '.goatcounter.com/count');
+    document.head.appendChild(gs);
+    var gcTimer = setInterval(function () {
+      if (window.goatcounter && window.goatcounter.count) {
+        clearInterval(gcTimer);
+        gcQueue.splice(0).forEach(function (o) { window.goatcounter.count(o); });
+      }
+    }, 400);
+    setTimeout(function () { clearInterval(gcTimer); }, 20000);
+  }
+
   var CODES = { '3f3vca':'w1', 'yjmicv':'w2', '3glc0e':'w3', 'yjramq':'w4' };
+  var NAMES = { w1:'Case File', w2:'Clay', w3:'Pumpkins', w4:'Parent Trap' };
 
   function hash(s){ var x=5381; for (var i=0;i<s.length;i++){ x=((x*33)^s.charCodeAt(i))>>>0; } return x.toString(36); }
   function clean(s){ return (s||'').toUpperCase().replace(/[^A-Z]/g,''); }
@@ -527,7 +558,8 @@ body[data-week="w4"] .cta{
   var msg = document.getElementById('msg');
   var tries = 0;
 
-  function show(id){
+  function show(id, solved){
+    if (solved) { gc('solved/' + id, 'Solved — ' + NAMES[id]); }
     lock.hidden = true;
     ['w1','w2','w3','w4'].forEach(function(w){ document.getElementById(w).hidden = (w !== id); });
     document.body.setAttribute('data-week', id);
@@ -550,8 +582,9 @@ body[data-week="w4"] .cta{
   form.addEventListener('submit', function (e) {
     e.preventDefault();
     var week = CODES[hash(clean(input.value))];
-    if (week) { show(week); return; }
+    if (week) { show(week, true); return; }
     tries++;
+    gc('failed/attempt-' + Math.min(tries, 3), 'Wrong answer');
     msg.textContent = tries < 3
       ? 'Not it. Try again.'
       : 'Still not it — text me and I’ll give you a nudge.';
@@ -565,7 +598,7 @@ body[data-week="w4"] .cta{
   // remember the last unlocked week on this device
   try {
     var saved = localStorage.getItem('ssfs-week');
-    if (saved && document.getElementById(saved)) { show(saved); }
+    if (saved && document.getElementById(saved)) { show(saved, false); }
   } catch (e) {}
 })();
 </script>
