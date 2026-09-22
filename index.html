@@ -549,6 +549,18 @@ body[data-week="w4"] .cta{
   var CODES = { '3f3vca':'w1', 'yjmicv':'w2', '3glc0e':'w3', 'yjramq':'w4' };
   var NAMES = { w1:'Case File', w2:'Clay', w3:'Pumpkins', w4:'Parent Trap' };
 
+  // Each week's page stays sealed until its puzzle drops: Tuesday 11am, Los Angeles.
+  // Fixed to LA regardless of the visitor's clock — every drop falls in PDT
+  // (UTC−7), so 11:00 LA is 18:00 UTC. Months are 0-indexed: 8 = Sep, 9 = Oct.
+  var OPENS = {
+    w1: Date.UTC(2026, 8, 22, 18, 0, 0),
+    w2: Date.UTC(2026, 8, 29, 18, 0, 0),
+    w3: Date.UTC(2026, 9, 20, 18, 0, 0),
+    w4: Date.UTC(2026, 9, 27, 18, 0, 0)
+  };
+
+  function isOpen(id){ return !OPENS[id] || Date.now() >= OPENS[id]; }
+
   function hash(s){ var x=5381; for (var i=0;i<s.length;i++){ x=((x*33)^s.charCodeAt(i))>>>0; } return x.toString(36); }
   function clean(s){ return (s||'').toUpperCase().replace(/[^A-Z]/g,''); }
 
@@ -582,7 +594,10 @@ body[data-week="w4"] .cta{
   form.addEventListener('submit', function (e) {
     e.preventDefault();
     var week = CODES[hash(clean(input.value))];
-    if (week) { show(week, true); return; }
+    if (week && isOpen(week)) { show(week, true); return; }
+    // A right answer before its Tuesday reads as wrong. Logged quietly so
+    // you can see someone ran ahead; they're told nothing.
+    if (week) { gc('early/' + week, 'Right answer, too early — ' + NAMES[week]); }
     tries++;
     gc('failed/attempt-' + Math.min(tries, 3), 'Wrong answer');
     msg.textContent = tries < 3
@@ -598,7 +613,7 @@ body[data-week="w4"] .cta{
   // remember the last unlocked week on this device
   try {
     var saved = localStorage.getItem('ssfs-week');
-    if (saved && document.getElementById(saved)) { show(saved, false); }
+    if (saved && document.getElementById(saved) && isOpen(saved)) { show(saved, false); }
   } catch (e) {}
 })();
 </script>
