@@ -551,12 +551,12 @@ body[data-week="w4"] .cta{
 
   // Each week's page stays sealed until its puzzle drops: Tuesday 11am, Los Angeles.
   // Fixed to LA regardless of the visitor's clock — every drop falls in PDT
-  // (UTC−7), so 11:00 LA is 18:00 UTC. Months are 0-indexed: 8 = Sep, 9 = Oct.
+  // (UTC−7), so 10:00 LA is 17:00 UTC. Months are 0-indexed: 8 = Sep, 9 = Oct.
   var OPENS = {
-    w1: Date.UTC(2026, 8, 22, 18, 0, 0),
-    w2: Date.UTC(2026, 8, 29, 18, 0, 0),
-    w3: Date.UTC(2026, 9, 20, 18, 0, 0),
-    w4: Date.UTC(2026, 9, 27, 18, 0, 0)
+    w1: Date.UTC(2026, 8, 22, 17, 0, 0),
+    w2: Date.UTC(2026, 8, 29, 17, 0, 0),
+    w3: Date.UTC(2026, 9, 20, 17, 0, 0),
+    w4: Date.UTC(2026, 9, 27, 17, 0, 0)
   };
 
   function isOpen(id){ return !OPENS[id] || Date.now() >= OPENS[id]; }
