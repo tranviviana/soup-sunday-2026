@@ -186,14 +186,54 @@ body[data-week="w1"] .week h1{letter-spacing:.01em}
 body[data-week="w1"] .menu .val strong{letter-spacing:.01em;font-size:19px}
 body[data-week="w1"] .dateline{border-top-style:double;border-top-width:4px}
 
-/* ============ theme: clay ============ */
+/* ============ theme: clay — ceramics classroom ============ */
 body[data-week="w2"]{
-  --paper:#E9E0D0; --panel:#F4EDE1; --ink:#2E2721; --ink2:#5E5344; --ink3:#8F8271;
+  --paper:#EFE9DA; --panel:#F9F5EC; --ink:#2B2620; --ink2:#5A5143; --ink3:#8B7F6D;
   --line:#CDBFA8; --accent:#A4653F;
+  --chalk:#4F6350;
   --disp:'Fraunces',Georgia,serif; --dispset:'SOFT' 100,'WONK' 1,'opsz' 72;
+  /* ruled notebook paper */
+  background-image:repeating-linear-gradient(
+    to bottom, transparent 0 31px, rgba(90,120,150,.15) 31px 32px);
+  background-attachment:local;
 }
-body[data-week="w2"] .gag{border-left-color:#7A8465}
+body[data-week="w2"] .gag{border-left-color:var(--chalk)}
 body[data-week="w2"] .rules .r{border-radius:14px 8px 16px 10px}
+body[data-week="w2"] .eyebrow{color:var(--chalk)}
+body[data-week="w2"] .blk > h2{color:var(--chalk)}
+
+/* the course header block */
+.course{
+  border:1.5px solid var(--line); background:var(--panel);
+  display:grid; grid-template-columns:repeat(3,1fr);
+  margin:22px 0 4px;
+}
+.course div{padding:11px 13px; border-right:1.5px solid var(--line)}
+.course div:last-child{border-right:none}
+.course dt{
+  font-size:10px; letter-spacing:.15em; text-transform:uppercase;
+  font-weight:700; color:var(--ink3); margin-bottom:3px;
+}
+.course dd{font-size:15px; font-weight:700; color:var(--ink); margin:0}
+@media (max-width:520px){
+  .course{grid-template-columns:1fr 1fr}
+  .course div:nth-child(2){border-right:none}
+  .course div:nth-child(3){grid-column:1/-1; border-top:1.5px solid var(--line)}
+}
+.supplies{list-style:none; margin:14px 0 0; padding:0; display:flex; flex-direction:column; gap:7px}
+.supplies li{position:relative; padding-left:26px; font-size:15px; line-height:1.5}
+.supplies li::before{
+  content:''; position:absolute; left:0; top:4px;
+  width:13px; height:13px; border:1.5px solid var(--ink3);
+}
+.supplies li.done::before{
+  background:var(--chalk); border-color:var(--chalk);
+}
+.supplies li.done::after{
+  content:''; position:absolute; left:4px; top:7px;
+  width:5px; height:8px; border:solid var(--panel);
+  border-width:0 2px 2px 0; transform:rotate(42deg);
+}
 
 /* ============ theme: pumpkins ============ */
 body[data-week="w3"]{
@@ -322,25 +362,41 @@ body[data-week="w4"] .cta{
 
 <!-- ========================= WEEK 2 ========================= -->
 <main class="week wrap" id="w2" hidden>
-  <p class="eyebrow">Field log 1004 &middot; specimens catalogued</p>
+  <p class="eyebrow">Ceramics 101 &middot; Section 1004 &middot; Fall term</p>
   <h1>Clay Figurines Day</h1>
   <div class="dateline">
     <span><b>Sunday 4 October</b></span>
     <span class="seats">7 seats</span>
   </div>
 
+  <div class="course">
+    <div><dt>Instructor</dt><dd>Nobody</dd></div>
+    <div><dt>Prerequisites</dt><dd>None</dd></div>
+    <div><dt>Grading</dt><dd>Pass / pass</dd></div>
+  </div>
+
   <section class="blk">
-    <h2>The night</h2>
-    <p class="lede">Everyone gets the same character, pulled out of a hat at the start, and sculpts their own version of it. Seven wildly different attempts at one thing, lined up at the end.</p>
+    <h2>Today's lesson</h2>
+    <p class="lede">Everyone draws the same character out of a hat and sculpts their own version of it. Seven wildly different attempts at one thing, lined up at the end. There is no right answer and nobody here can do this, which is the point.</p>
   </section>
 
   <section class="blk">
-    <h2>The menu</h2>
+    <h2>Supply list</h2>
+    <ul class="supplies">
+      <li class="done">Clay &mdash; provided</li>
+      <li class="done">Tools, boards and a reference photo &mdash; provided</li>
+      <li>Your own bowl, plate, cup and utensils</li>
+      <li>Sleeves you don't mind getting clay on</li>
+    </ul>
+  </section>
+
+  <section class="blk">
+    <h2>Cafeteria</h2>
     <div class="menu">
       <div class="row"><div class="lbl">Soup</div><div class="val"><strong>Creamy wild mushroom</strong><span>Fresh mushrooms and dried porcini, blended smooth with thyme and cream.</span></div></div>
-      <div class="row"><div class="lbl">Sandwich</div><div class="val"><strong>Roast beef, provolone &amp; dijon</strong><span>On ciabatta, pressed. Horseradish on the table if you want it.</span></div></div>
+      <div class="row"><div class="lbl">Sandwich</div><div class="val"><strong>Roast beef, smoked gouda &amp; dijon</strong><span>On ciabatta, pressed. Horseradish on the table if you want it.</span></div></div>
     </div>
-    <p class="gag"><b>Eat first, sculpt second.</b></p>
+    <p class="gag"><b>Lunch period first. Studio after.</b></p>
     <details class="rec">
       <summary>The recipe</summary>
       <div class="recbody">
@@ -370,7 +426,7 @@ body[data-week="w4"] .cta{
   </section>
 
   <section class="blk">
-    <h2>The rules</h2>
+    <h2>Class policies</h2>
     <div class="rules">
       <div class="r"><b>Bring your own bowl</b>Also utensils, a plate and a cup. I don't have eight of everything.</div>
       <div class="r"><b>$8, or bring something</b>Drinks, snacks or dessert instead of paying — only 3 people a week can pick that, first come.</div>
@@ -379,7 +435,7 @@ body[data-week="w4"] .cta{
   </section>
 
   <div class="cta">
-    <a class="btn" href="https://docs.google.com/forms/d/e/1FAIpQLSeHEXfxetfb8y0fjcO4-PAfveQkGHJry7r3GTerJe3_MSvk8A/viewform" target="_blank" rel="noopener">Claim a seat</a>
+    <a class="btn" href="https://docs.google.com/forms/d/e/1FAIpQLSeHEXfxetfb8y0fjcO4-PAfveQkGHJry7r3GTerJe3_MSvk8A/viewform" target="_blank" rel="noopener">Enroll</a>
     <p class="fine">Signups close <b>Thursday at noon</b>. You'll hear from me either way before Friday afternoon.<br>Time and address come in that text.</p>
   </div>
   <div class="backrow"><button type="button" class="back">← another week</button></div>
@@ -549,11 +605,11 @@ body[data-week="w4"] .cta{
   var CODES = { '3f3vca':'w1', 'yjmicv':'w2', '3glc0e':'w3', 'yjramq':'w4' };
   var NAMES = { w1:'Case File', w2:'Clay', w3:'Pumpkins', w4:'Parent Trap' };
 
-  // Each week's page stays sealed until its puzzle drops: Tuesday 11am, Los Angeles.
+  // Each week's page stays sealed until its puzzle drops: Tuesday 10am, Los Angeles.
   // Fixed to LA regardless of the visitor's clock — every drop falls in PDT
   // (UTC−7), so 10:00 LA is 17:00 UTC. Months are 0-indexed: 8 = Sep, 9 = Oct.
   var OPENS = {
-    w1: Date.UTC(2026, 8, 22, 15, 0, 0),
+    w1: Date.UTC(2026, 8, 22, 17, 0, 0),
     w2: Date.UTC(2026, 8, 29, 17, 0, 0),
     w3: Date.UTC(2026, 9, 20, 17, 0, 0),
     w4: Date.UTC(2026, 9, 27, 17, 0, 0)
