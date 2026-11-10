@@ -145,6 +145,23 @@ ol.method li{font-size:15px;line-height:1.55;color:var(--ink2)}
 ol.method li b{color:var(--ink)}
 ol.method li::marker{color:var(--accent);font-weight:700}
 
+.shots{
+  display:grid; grid-template-columns:1fr 1fr; gap:10px;
+  margin-top:22px;
+}
+.shots figure{margin:0}
+.shots img{
+  display:block; width:100%; height:260px; object-fit:cover;
+  border:1px solid var(--line); border-radius:4px;
+}
+.shots figcaption{
+  margin-top:7px; font-size:12px; letter-spacing:.09em;
+  text-transform:uppercase; color:var(--ink3);
+}
+@media (max-width:560px){
+  .shots{grid-template-columns:1fr}
+  .shots img{height:220px}
+}
 .rules{display:grid;gap:2px}
 .rules .r{
   background:var(--panel);padding:14px 16px;
@@ -507,7 +524,7 @@ body[data-week="w4"] .cta{
 
 <!-- ========================= WEEK 4 ========================= -->
 <main class="week wrap" id="w4" hidden>
-  <p class="eyebrow">Cabin roster &middot; final session of the summer</p>
+  <p class="eyebrow">Camp Walden &middot; final session of the summer</p>
   <h1>Camp Night</h1>
   <div class="dateline">
     <span><b>Sunday 15 November</b></span>
@@ -516,7 +533,17 @@ body[data-week="w4"] .cta{
 
   <section class="blk">
     <h2>The night</h2>
-    <p class="lede">Like every camp night — grab a bite, gather around the fire, play some board games. The game is Codenames. Dessert is a blind Oreo tasting. Last night of the season.</p>
+    <p class="lede">Like every camp night — grab a bite, gather around the fire, play some board games. The game is Codenames. Dessert is a blind Oreo tasting, which campers at Walden have strong opinions about. Last night of the season.</p>
+    <div class="shots">
+      <figure>
+        <img src="camp.png" alt="The camp lodge in the trees, campers walking up the path with their bags">
+        <figcaption>The lodge</figcaption>
+      </figure>
+      <figure>
+        <img src="dock.png" alt="A wooden dock at dusk with canoes tied alongside">
+        <figcaption>The dock</figcaption>
+      </figure>
+    </div>
   </section>
 
   <section class="blk">
